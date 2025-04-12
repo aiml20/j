@@ -1,49 +1,44 @@
-mport java.util.*;
+//11(i)
+import java.util.*;
 
-public class LexSmallestString {
-    static int[] parent;
-
-    static int find(int x) {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]);
-        return parent[x];
-    }
-
-    static void union(int x, int y) {
-        int px = find(x);
-        int py = find(y);
-        if (px != py)
-            parent[px] = py;
-    }
-
+public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String str = sc.nextLine();
-        int n = sc.nextInt();
-        char[] s = str.toCharArray();
-        int len = s.length;
-
-        parent = new int[len];
-        for (int i = 0; i < len; i++) parent[i] = i;
-
-        for (int i = 0; i < n; i++) {
-            int a = sc.nextInt();
-            int b = sc.nextInt();
-            union(a, b);
+        int p = sc.nextInt(), f = sc.nextInt(), c = sc.nextInt();
+        if (p < 0 || f < 0 || c < 0)
+            System.out.println("Invalid input");
+        else {
+            int total = p * 100 + f * 20 + c * 10;
+            System.out.println("No of pizzas: " + p);
+            System.out.println("No of puffs: " + f);
+            System.out.println("No of cooldrinks: " + c);
+            System.out.println(total);
         }
-
-        // Group characters by root parent manually
-        for (int i = 0; i < len; i++) {
-            for (int j = i + 1; j < len; j++) {
-                if (find(i) == find(j) && s[i] > s[j]) {
-                    // Swap to make lexicographically smaller
-                    char temp = s[i];
-                    s[i] = s[j];
-                    s[j] = temp;
-                }
-            }
+    }
+}
+            
+//13(i)
+import java.util.*;
+abstract class VowelPerm {
+    abstract boolean isValid(String s);
+}
+public class Main extends VowelPerm {
+    public boolean isValid(String s) {
+        String v = s.replaceAll("[^aeiou]", "");
+        if (v.isEmpty()) return false;
+        for (int i = 0; i < v.length() - 1; i++) {
+            char a = v.charAt(i), b = v.charAt(i + 1);
+            if (a == 'a' && b != 'e') return false;
+            if (a == 'e' && b != 'a' && b != 'i') return false;
+            if (a == 'i' && b == 'i') return false;
+            if (a == 'o' && b != 'i' && b != 'u') return false;
+            if (a == 'u' && b != 'a') return false;
         }
-
-        System.out.println(new String(s));
+        return true;
+    }
+    public static void main(String[] args) {
+        String s = new Scanner(System.in).nextLine();
+        Main obj = new Main();
+        System.out.println(obj.isValid(s) ? 1 : "Invalid input");
     }
 }
